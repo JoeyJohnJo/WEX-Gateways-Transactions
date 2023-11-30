@@ -16,9 +16,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Optional;
 
+/**
+ * Global exception resolver for handling specific exceptions and providing custom error responses.
+ */
 @RestControllerAdvice
 public class ExceptionResolver {
 
+    /**
+     * Handles ExchangeRateNotAvailableException and returns a NOT_FOUND response with an ErrorResponseBody.
+     *
+     * @param exception The ExchangeRateNotAvailableException to handle.
+     * @return ResponseEntity with NOT_FOUND status and an ErrorResponseBody.
+     */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ExchangeRateNotAvailableException.class)
     public ResponseEntity<ErrorResponseBody> exchangeRateNotAvailableException(ExchangeRateNotAvailableException exception) {
@@ -26,6 +35,12 @@ public class ExceptionResolver {
             .body(new ErrorResponseBody(null, exception.getLocalizedMessage()));
     }
 
+    /**
+     * Handles NotFoundException and returns a NOT_FOUND response with an ErrorResponseBody.
+     *
+     * @param exception The NotFoundException to handle.
+     * @return ResponseEntity with NOT_FOUND status and an ErrorResponseBody.
+     */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponseBody> notFoundException(NotFoundException exception) {
@@ -33,6 +48,12 @@ public class ExceptionResolver {
             .body(new ErrorResponseBody(exception.getRequestedResource(), exception.getLocalizedMessage()));
     }
 
+    /**
+     * Handles InvalidValueException and returns a BAD_REQUEST response with an ErrorResponseBody.
+     *
+     * @param exception The InvalidValueException to handle.
+     * @return ResponseEntity with BAD_REQUEST status and an ErrorResponseBody.
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidValueException.class)
     public ResponseEntity<ErrorResponseBody> invalidValueException(InvalidValueException exception) {
@@ -40,6 +61,12 @@ public class ExceptionResolver {
             .body(new ErrorResponseBody(exception.getFaultyValue(), exception.getLocalizedMessage()));
     }
 
+    /**
+     * Handles MethodArgumentNotValidException and returns a BAD_REQUEST response with an ErrorResponseBody.
+     *
+     * @param exception The MethodArgumentNotValidException to handle.
+     * @return ResponseEntity with BAD_REQUEST status and an ErrorResponseBody.
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseBody> methodArgumentNotValidException(MethodArgumentNotValidException exception) {
@@ -50,9 +77,15 @@ public class ExceptionResolver {
         ));
     }
 
+    /**
+     * Handles HttpMessageNotReadableException and returns a BAD_REQUEST response with an ErrorResponseBody.
+     *
+     * @param exception The MethodArgumentNotValidException to handle.
+     * @return ResponseEntity with BAD_REQUEST status and an ErrorResponseBody.
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponseBody> httpMessageNotReadableException(HttpMessageNotReadableException unused) {
+    public ResponseEntity<ErrorResponseBody> httpMessageNotReadableException(HttpMessageNotReadableException exception) {
         return ResponseEntity.badRequest().body(new ErrorResponseBody(null,
             Localization.getExceptionMessageForLocale("exception.httpMessageNotReadableException",
                 LocaleContextHolder.getLocale())

@@ -5,10 +5,7 @@ import com.wex.gateways.transactions.app.domain.exceptions.errors.ExchangeRateNo
 import com.wex.gateways.transactions.app.domain.services.FetchExchangeRate;
 import com.wex.gateways.transactions.app.httpclient.dtos.FiscalDataRatesOfExchangeResponseDto;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 
 import java.math.BigDecimal;
@@ -16,9 +13,11 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Service class for fetching exchange rates from the Fiscal Data Treasury API.
+ */
 @Service
 public class FiscalDataTreasuryClient implements FetchExchangeRate {
 
@@ -28,6 +27,14 @@ public class FiscalDataTreasuryClient implements FetchExchangeRate {
     private static final String ratesOfExchangeEndpoint = "/v1/accounting/od/rates_of_exchange";
     public static final String DATE_PATTERN = "yyyy-MM-dd";
 
+    /**
+     * Fetches exchange rate information from the Fiscal Data Treasury API.
+     *
+     * @param currency The currency for which the exchange rate is requested.
+     * @param date     The date for which the exchange rate is requested.
+     * @return An {@link ExchangeRateDto} containing the exchange rate information.
+     * @throws ExchangeRateNotAvailableException if the exchange rate is not available.
+     */
     @Override
     public ExchangeRateDto fetchExchangeRate(String currency, Timestamp date) {
         var response = RestClient.create(baseUrl).get()
@@ -55,6 +62,13 @@ public class FiscalDataTreasuryClient implements FetchExchangeRate {
         return new SimpleDateFormat(DATE_PATTERN).format(timestamp);
     }
 
+    /**
+     * Converts a date string to a {@link Timestamp}.
+     *
+     * @param dateString The date string to convert.
+     * @return The {@link Timestamp} representation of the date.
+     * @throws ExchangeRateNotAvailableException if the conversion fails.
+     */
     public static Timestamp convertToTimestamp(String dateString) {
         try {
             return new Timestamp(new SimpleDateFormat(DATE_PATTERN).parse(dateString).getTime());

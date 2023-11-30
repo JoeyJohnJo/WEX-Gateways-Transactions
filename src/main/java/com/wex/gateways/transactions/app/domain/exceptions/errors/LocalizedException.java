@@ -1,4 +1,4 @@
-package com.wex.gateways.transactions.app.errors.exceptions;
+package com.wex.gateways.transactions.app.domain.exceptions.errors;
 
 import com.wex.gateways.transactions.app.config.i18n.Localization;
 

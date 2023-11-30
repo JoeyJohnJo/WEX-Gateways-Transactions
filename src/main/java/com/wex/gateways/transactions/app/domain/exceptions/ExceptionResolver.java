@@ -1,6 +1,6 @@
-package com.wex.gateways.transactions.app.errors;
+package com.wex.gateways.transactions.app.domain.exceptions;
 
-import com.wex.gateways.transactions.app.errors.exceptions.InvalidValueException;
+import com.wex.gateways.transactions.app.domain.exceptions.errors.InvalidValueException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

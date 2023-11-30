@@ -1,15 +1,15 @@
-package com.wex.gateways.transactions.app.services;
+package com.wex.gateways.transactions.app.domain.services;
 
-import com.wex.gateways.transactions.app.database.entities.PurchaseTransaction;
-import com.wex.gateways.transactions.app.database.repositories.PurchaseTransactionRepository;
-import com.wex.gateways.transactions.app.errors.exceptions.InvalidValueException;
+import com.wex.gateways.transactions.app.domain.database.entities.PurchaseTransaction;
+import com.wex.gateways.transactions.app.domain.database.repositories.PurchaseTransactionRepository;
+import com.wex.gateways.transactions.app.domain.exceptions.errors.InvalidValueException;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
 
-import static com.wex.gateways.transactions.app.database.entities.PurchaseTransaction.MAX_DESCRIPTION_LENGTH;
+import static com.wex.gateways.transactions.app.domain.database.entities.PurchaseTransaction.MAX_DESCRIPTION_LENGTH;
 
 @Service
 public class PurchaseTransactionServiceImpl implements PurchaseTransactionService {

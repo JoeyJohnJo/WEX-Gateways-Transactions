@@ -1,4 +1,4 @@
-package com.wex.gateways.transactions.app.errors.exceptions;
+package com.wex.gateways.transactions.app.domain.exceptions.errors;
 
 public class InvalidValueException extends LocalizedException {
 

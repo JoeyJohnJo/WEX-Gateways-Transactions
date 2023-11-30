@@ -1,9 +1,9 @@
 package com.wex.gateways.transactions.services;
 
-import com.wex.gateways.transactions.app.database.entities.PurchaseTransaction;
-import com.wex.gateways.transactions.app.database.repositories.PurchaseTransactionRepository;
-import com.wex.gateways.transactions.app.services.PurchaseTransactionService;
-import com.wex.gateways.transactions.app.services.PurchaseTransactionServiceImpl;
+import com.wex.gateways.transactions.app.domain.database.entities.PurchaseTransaction;
+import com.wex.gateways.transactions.app.domain.database.repositories.PurchaseTransactionRepository;
+import com.wex.gateways.transactions.app.domain.services.PurchaseTransactionService;
+import com.wex.gateways.transactions.app.domain.services.PurchaseTransactionServiceImpl;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Timestamp;

@@ -1,4 +1,4 @@
-package com.wex.gateways.transactions.app.database.entities;
+package com.wex.gateways.transactions.app.domain.database.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

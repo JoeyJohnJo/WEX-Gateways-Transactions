@@ -1,6 +1,6 @@
-package com.wex.gateways.transactions.app.services;
+package com.wex.gateways.transactions.app.domain.services;
 
-import com.wex.gateways.transactions.app.database.entities.PurchaseTransaction;
+import com.wex.gateways.transactions.app.domain.database.entities.PurchaseTransaction;
 import jakarta.validation.Valid;
 
 public interface PurchaseTransactionService {

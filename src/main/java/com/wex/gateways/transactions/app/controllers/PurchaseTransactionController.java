@@ -20,7 +20,7 @@ public class PurchaseTransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<PurchaseTransactionDetailsDto> storePurchaseTransaction(
+    public ResponseEntity<PurchaseTransactionDetailsDto> c(
         @Valid @RequestBody PurchaseTransactionCreateDto dto) {
         return ResponseEntity.ok(
             PurchaseTransactionDetailsDto.from(

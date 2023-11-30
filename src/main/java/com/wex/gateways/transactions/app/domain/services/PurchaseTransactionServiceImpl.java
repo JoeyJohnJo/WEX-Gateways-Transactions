@@ -3,13 +3,17 @@ package com.wex.gateways.transactions.app.domain.services;
 import com.wex.gateways.transactions.app.domain.database.entities.PurchaseTransaction;
 import com.wex.gateways.transactions.app.domain.database.repositories.PurchaseTransactionRepository;
 import com.wex.gateways.transactions.app.domain.dtos.PurchaseTransactionCurrencyConvertedDetailsDto;
+import com.wex.gateways.transactions.app.domain.exceptions.errors.ExchangeRateNotAvailableException;
 import com.wex.gateways.transactions.app.domain.exceptions.errors.InvalidValueException;
 import com.wex.gateways.transactions.app.domain.exceptions.errors.NotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.UUID;
 
 import static com.wex.gateways.transactions.app.domain.database.entities.PurchaseTransaction.MAX_DESCRIPTION_LENGTH;
@@ -37,6 +41,7 @@ public class PurchaseTransactionServiceImpl implements PurchaseTransactionServic
     public PurchaseTransactionCurrencyConvertedDetailsDto getPurchaseTransactionInCurrency(UUID id, String currency) {
         var transaction = getPurchaseTransactionById(id);
         var exchangeRate = fetchExchangeRate.fetchExchangeRate(currency, transaction.getDate());
+        assertExchangeRateDateIsWithinSixMonthsOfPurchaseDate(exchangeRate.date(), transaction.getDate());
         return new PurchaseTransactionCurrencyConvertedDetailsDto(
             transaction.getId(),
             transaction.getDescription(),
@@ -45,7 +50,7 @@ public class PurchaseTransactionServiceImpl implements PurchaseTransactionServic
             transaction.getAmount(),
             exchangeRate.currency(),
             exchangeRate.exchangeRate(),
-            transaction.getDollarAmount().multiply(exchangeRate.exchangeRate())
+            transaction.getDollarAmount().multiply(exchangeRate.exchangeRate()).setScale(2, RoundingMode.HALF_EVEN)
         );
     }
 
@@ -65,5 +70,19 @@ public class PurchaseTransactionServiceImpl implements PurchaseTransactionServic
 
         if (purchaseTransaction.getAmount() <= 0)
             throw new InvalidValueException(purchaseTransaction.getAmount());
+    }
+
+    private void assertExchangeRateDateIsWithinSixMonthsOfPurchaseDate(Timestamp exchangeRateDate, Timestamp purchaseDate) {
+        LocalDate exchangeRateLocalDate = convertToLocalDate(exchangeRateDate);
+        LocalDate purchaseLocalDate = convertToLocalDate(purchaseDate);
+        LocalDate sixMonthsAgo = purchaseLocalDate.minusMonths(6);
+
+        if (exchangeRateLocalDate.isBefore(sixMonthsAgo) || exchangeRateLocalDate.isAfter(purchaseLocalDate))
+            throw new ExchangeRateNotAvailableException();
+    }
+
+    private LocalDate convertToLocalDate(Timestamp timestamp) {
+        Instant instant = timestamp.toInstant();
+        return instant.atZone(ZoneId.systemDefault()).toLocalDate();
     }
 }

@@ -1,6 +1,7 @@
 package com.wex.gateways.transactions.app.domain.exceptions;
 
 import com.wex.gateways.transactions.app.config.i18n.Localization;
+import com.wex.gateways.transactions.app.domain.exceptions.errors.ExchangeRateNotAvailableException;
 import com.wex.gateways.transactions.app.domain.exceptions.errors.InvalidValueException;
 import com.wex.gateways.transactions.app.domain.exceptions.errors.NotFoundException;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -13,11 +14,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @RestControllerAdvice
 public class ExceptionResolver {
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ExchangeRateNotAvailableException.class)
+    public ResponseEntity<ErrorResponseBody> exchangeRateNotAvailableException(ExchangeRateNotAvailableException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(new ErrorResponseBody(null, exception.getLocalizedMessage()));
+    }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)

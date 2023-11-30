@@ -7,9 +7,11 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/transactions")
+@RestController
+@RequestMapping("/transactions")
 public class PurchaseTransactionController {
     private final PurchaseTransactionService purchaseTransactionService;
 
@@ -18,7 +20,8 @@ public class PurchaseTransactionController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> storePurchaseTransaction(@Valid @RequestBody PurchaseTransactionCreateDto dto) {
+    public ResponseEntity<PurchaseTransactionDetailsDto> storePurchaseTransaction(
+        @Valid @RequestBody PurchaseTransactionCreateDto dto) {
         return ResponseEntity.ok(
             PurchaseTransactionDetailsDto.from(
                 purchaseTransactionService.storePurchaseTransaction(dto.toPurchaseTransaction())

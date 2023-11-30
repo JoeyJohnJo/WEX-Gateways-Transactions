@@ -2,6 +2,7 @@ package com.wex.gateways.transactions.app.domain.exceptions;
 
 import com.wex.gateways.transactions.app.config.i18n.Localization;
 import com.wex.gateways.transactions.app.domain.exceptions.errors.InvalidValueException;
+import com.wex.gateways.transactions.app.domain.exceptions.errors.NotFoundException;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,13 @@ import java.util.Optional;
 
 @RestControllerAdvice
 public class ExceptionResolver {
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponseBody> notFoundException(NotFoundException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(new ErrorResponseBody(exception.getRequestedResource(), exception.getLocalizedMessage()));
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidValueException.class)

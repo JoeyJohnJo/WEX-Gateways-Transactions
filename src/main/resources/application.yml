@@ -8,3 +8,7 @@ spring:
     url: jdbc:postgresql://${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/wextransactions
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
+
+api:
+  fiscaldata:
+    base: https://api.fiscaldata.treasury.gov/services/api/fiscal_service

@@ -1,14 +1,14 @@
 package com.wex.gateways.transactions.app.controllers;
 
 import com.wex.gateways.transactions.app.domain.dtos.PurchaseTransactionCreateDto;
+import com.wex.gateways.transactions.app.domain.dtos.PurchaseTransactionCurrencyConvertedDetailsDto;
 import com.wex.gateways.transactions.app.domain.dtos.PurchaseTransactionDetailsDto;
 import com.wex.gateways.transactions.app.domain.services.PurchaseTransactionService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/transactions")
@@ -27,5 +27,11 @@ public class PurchaseTransactionController {
                 purchaseTransactionService.storePurchaseTransaction(dto.toPurchaseTransaction())
             )
         );
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PurchaseTransactionCurrencyConvertedDetailsDto> getPurchaseTransactionInCurrency(
+        @PathVariable UUID id, @RequestParam String currency) {
+        return ResponseEntity.ok(purchaseTransactionService.getPurchaseTransactionInCurrency(id, currency));
     }
 }

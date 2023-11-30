@@ -6,6 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -78,5 +80,10 @@ public class PurchaseTransaction {
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    @Transient
+    public BigDecimal getDollarAmount() {
+        return BigDecimal.valueOf(getAmount()).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN);
     }
 }

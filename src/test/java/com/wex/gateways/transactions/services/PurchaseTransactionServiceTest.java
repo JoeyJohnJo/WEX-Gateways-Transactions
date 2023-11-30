@@ -2,6 +2,7 @@ package com.wex.gateways.transactions.services;
 
 import com.wex.gateways.transactions.app.domain.database.entities.PurchaseTransaction;
 import com.wex.gateways.transactions.app.domain.database.repositories.PurchaseTransactionRepository;
+import com.wex.gateways.transactions.app.domain.services.FetchExchangeRate;
 import com.wex.gateways.transactions.app.domain.services.PurchaseTransactionService;
 import com.wex.gateways.transactions.app.domain.services.PurchaseTransactionServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,8 @@ class PurchaseTransactionServiceTest {
     void testStorePurchaseTransaction() {
 
         PurchaseTransactionRepository purchaseTransactionRepository = mock(PurchaseTransactionRepository.class);
-        PurchaseTransactionService purchaseTransactionService = new PurchaseTransactionServiceImpl(purchaseTransactionRepository);
+        FetchExchangeRate fetchExchangeRate = mock(FetchExchangeRate.class);
+        PurchaseTransactionService purchaseTransactionService = new PurchaseTransactionServiceImpl(purchaseTransactionRepository, fetchExchangeRate);
 
         String description = "Test Purchase";
         Timestamp transactionDate = Timestamp.from(Instant.now());

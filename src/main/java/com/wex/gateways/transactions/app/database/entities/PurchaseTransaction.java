@@ -10,14 +10,16 @@ import java.util.UUID;
 
 @Entity
 public class PurchaseTransaction {
+    public static final int MAX_DESCRIPTION_LENGTH = 50;
+
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @NotBlank
-    @Size(min = 1, max = 50)
-    @Column(length = 50, nullable = false)
+    @Size(min = 1, max = MAX_DESCRIPTION_LENGTH)
+    @Column(length = MAX_DESCRIPTION_LENGTH, nullable = false)
     private String description;
 
     @NotNull
@@ -28,6 +30,22 @@ public class PurchaseTransaction {
     @Size(min = 1)
     @Column(nullable = false)
     private int amount;
+
+    public PurchaseTransaction() {
+    }
+
+    public PurchaseTransaction(String description, Timestamp date, int amount) {
+        this.description = description;
+        this.date = date;
+        this.amount = amount;
+    }
+
+    public PurchaseTransaction(UUID id, String description, Timestamp date, int amount) {
+        this.id = id;
+        this.description = description;
+        this.date = date;
+        this.amount = amount;
+    }
 
     public UUID getId() {
         return id;

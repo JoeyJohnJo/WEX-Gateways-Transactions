@@ -2,10 +2,13 @@ package com.wex.gateways.transactions.services;
 
 import com.wex.gateways.transactions.app.database.entities.PurchaseTransaction;
 import com.wex.gateways.transactions.app.database.repositories.PurchaseTransactionRepository;
+import com.wex.gateways.transactions.app.services.PurchaseTransactionService;
+import com.wex.gateways.transactions.app.services.PurchaseTransactionServiceImpl;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,21 +18,24 @@ class PurchaseTransactionServiceTest {
 
     @Test
     void testStorePurchaseTransaction() {
-        // Arrange
-        PurchaseTransactionRepository purchaseTransactionRepositoryClass = mock(PurchaseTransactionRepository.class);
-        PurchaseTransactionService purchaseTransactionService = new PurchaseTransactionService(purchaseTransactionRepositoryClass);
+
+        PurchaseTransactionRepository purchaseTransactionRepository = mock(PurchaseTransactionRepository.class);
+        PurchaseTransactionService purchaseTransactionService = new PurchaseTransactionServiceImpl(purchaseTransactionRepository);
 
         String description = "Test Purchase";
         Timestamp transactionDate = Timestamp.from(Instant.now());
         int purchaseAmount = 2550;
 
-        PurchaseTransaction storedTransaction = purchaseTransactionService.storePurchaseTransaction(description, transactionDate, purchaseAmount);
+        when(purchaseTransactionRepository.save(any(PurchaseTransaction.class)))
+            .thenReturn(new PurchaseTransaction(UUID.randomUUID(), description, transactionDate, purchaseAmount));
+
+        PurchaseTransaction storedTransaction = purchaseTransactionService.storePurchaseTransaction(new PurchaseTransaction(description, transactionDate, purchaseAmount));
 
         assertNotNull(storedTransaction.getId());
         assertEquals(description, storedTransaction.getDescription());
         assertEquals(transactionDate, storedTransaction.getDate());
         assertEquals(purchaseAmount, storedTransaction.getAmount());
 
-        verify(purchaseTransactionRepositoryClass).save(any(PurchaseTransaction.class));
+        verify(purchaseTransactionRepository).save(any(PurchaseTransaction.class));
     }
 }

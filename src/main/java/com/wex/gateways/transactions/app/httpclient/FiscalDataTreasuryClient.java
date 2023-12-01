@@ -45,11 +45,15 @@ public class FiscalDataTreasuryClient implements FetchExchangeRate {
                 .queryParam("sort", "-record_date")
                 .queryParam("page[size]", "1")
                 .build())
-            .retrieve();
+            .retrieve()
+            .toEntity(FiscalDataRatesOfExchangeResponseDto.class).getBody();
 
-        return Optional.ofNullable(response.toEntity(FiscalDataRatesOfExchangeResponseDto.class).getBody())
-            .map(FiscalDataRatesOfExchangeResponseDto::getData)
-            .map(List::getFirst)
+        if (Optional.ofNullable(response).isEmpty() ||
+            Optional.ofNullable(response.getData()).isEmpty() ||
+            response.getData().isEmpty())
+            throw new ExchangeRateNotAvailableException();
+
+        return Optional.ofNullable(response.getData().getFirst())
             .map(it -> new ExchangeRateDto(
                 it.getCountryCurrencyDesc(),
                 new BigDecimal(it.getExchangeRate()),

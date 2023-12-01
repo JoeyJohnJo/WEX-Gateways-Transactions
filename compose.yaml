@@ -1,0 +1,25 @@
+services:
+  database:
+    image: 'postgres:15.2'
+    ports:
+      - '5432'
+    environment:
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_DB=wextransactions'
+      - 'POSTGRES_PASSWORD=postgres'
+  prometheus:
+    image: prom/prometheus:v2.44.0
+    container_name: wexprometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana:9.5.2
+    container_name: wexgrafana
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources

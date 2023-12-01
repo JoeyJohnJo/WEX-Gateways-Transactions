@@ -5,7 +5,7 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/wextransactions
+    url: jdbc:postgresql://${POSTGRES_HOST:127.0.0.1}:${POSTGRES_PORT:5432}/${POSTGRES_DB:wextransactions}
     username: ${POSTGRES_USER:postgres}
     password: ${POSTGRES_PASSWORD:postgres}
 management:
